@@ -1,0 +1,24 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "ehrql-authoring",
+  "description": "ehrQL dataset authoring for OpenSAFELY",
+  "owner": {
+    "name": "opensafely-core",
+    "email": "team@opensafely.org"
+  },
+  "plugins": [
+    {
+      "name": "ehrql-authoring",
+      "description": "Write, test, and iterate on ehrQL dataset definitions. Includes environment setup, project scaffolding, and bundled OpenSAFELY reference docs.",
+      "author": {
+        "name": "opensafely-core"
+      },
+      "category": "developer-tools",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/opensafely-core/ehrql-plugin.git"
+      },
+      "homepage": "https://github.com/opensafely-core/ehrql-plugin"
+    }
+  ]
+}

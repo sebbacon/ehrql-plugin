@@ -1,0 +1,25 @@
+{
+  "name": "ehrql-authoring",
+  "version": "1.0.0",
+  "description": "ehrQL dataset authoring for OpenSAFELY — skill, templates, and environment setup",
+  "author": {
+    "name": "opensafely-core",
+    "url": "https://github.com/opensafely-core"
+  },
+  "homepage": "https://github.com/opensafely-core/ehrql-plugin",
+  "license": "MIT",
+  "keywords": ["ehrql", "opensafely", "health-data", "clinical"],
+  "skills": "./skills/",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/session-start.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
