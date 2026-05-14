@@ -132,6 +132,8 @@ Always test. Dummy-data generation checks that the definition compiles and can p
 
 ## Upstream doc map
 
+- `references/upstream/language-specs.md`
+  Exhaustive operation-by-operation specification (15 sections, ~200 named operations): filtering, row selection, aggregations, boolean/integer/float arithmetic, codelist containment, case/when, date arithmetic, string operations, population definition. Each entry is a heading plus a one-line Python example. Use this to verify exact method signatures or discover lesser-known operations.
 - `references/upstream/reference-cheatsheet.md`
   Quick syntax refresher: patient vs event frames, common tables, codelists, `where`, `sort_by`, `first_for_patient`, `last_for_patient`, aggregations, date predicates, and operators.
 - `references/upstream/how-to-examples.md`
