@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'echo \"[ehrql-plugin]\"; command -v uv >/dev/null 2>&1 || echo \"uv not installed. Run: curl -LsSf https://astral.sh/uv/install.sh | sh\"; [ -f pyproject.toml ] || echo \"No pyproject.toml found. Offer to scaffold a new project.\"; [ -f pyproject.toml ] && ! [ -x .venv/bin/ehrql ] && echo \"ehrQL not installed. Run: uv sync\" || true; command -v uv >/dev/null 2>&1 && [ -f pyproject.toml ] && [ -x .venv/bin/ehrql ] && echo \"ehrQL environment ready.\" || true'"
+          }
+        ]
+      }
+    ]
+  }
+}
