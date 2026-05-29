@@ -38,7 +38,6 @@ Or load for a single session without installing:
 ```bash
 claude --plugin-url https://github.com/opensafely-core/ehrql-plugin/archive/refs/heads/main.zip
 ```
-```
 
 ### Codex
 
