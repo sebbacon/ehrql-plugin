@@ -143,6 +143,13 @@ Whenever codelists are imported, add a clearly visible block comment near the to
 8. Run dummy-data generation and fix any failures.
 9. Update `README.md` to reflect the current state of the dataset definition: describe the brief (what the definition is trying to implement, in plain language) and include the exact command to generate a dataset from it.
 
+For a project that will be published to a Codespace, document the containerized
+OpenSAFELY invocation using the scaffolded file and directory names:
+
+```sh
+opensafely exec ehrql:v1 generate-dataset analysis/dataset_definition.py --dummy-tables dummy-tables
+```
+
 If the user asks for a preloaded Codespace, complete all nine steps first, then read and follow [references/codespaces.md](references/codespaces.md). Repository creation and pushing are separate external mutations and require the destination owner, name, visibility, and authorization described there.
 
 When offering to publish the finished project, ask the user for a repository
