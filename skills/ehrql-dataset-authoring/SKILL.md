@@ -1,11 +1,11 @@
 ---
 name: ehrql-dataset-authoring
-description: Use when writing or editing an ehrQL dataset definition (`analysis/dataset_definition.py`) or related assurance tests. This skill explains environment setup, project scaffolding, the ehrQL authoring workflow, how to run `ehrql generate-dataset` for dummy data, how to organise and run assurance tests, and what each bundled upstream ehrQL doc covers.
+description: Use when writing or editing an ehrQL dataset definition (`analysis/dataset_definition.py`) or related assurance tests, scaffolding an OpenSAFELY research project, or providing the finished project as a preloaded GitHub Codespace. Covers setup, validation, dummy data, assurance tests, and Codespace handoff.
 ---
 
 # ehrQL Dataset Authoring
 
-Use this skill when the user wants to create or modify an ehrQL dataset definition, set up a new ehrQL project, or run tests against a dataset definition.
+Use this skill when the user wants to create or modify an ehrQL dataset definition, set up a new OpenSAFELY project, run tests against a dataset definition, or receive the finished project in a GitHub Codespace.
 
 ## Required gates
 
@@ -24,20 +24,21 @@ If a required command cannot run, stop and report the specific blocker. Do not s
 
 ## Environment setup
 
-The skill's setup scripts live in a `scripts/` directory alongside this file. Locate the skill root with:
+The plugin's setup scripts live in its top-level `scripts/` directory. Locate the plugin root with:
 
 ```bash
 # Claude Code
-SKILL_ROOT="$(dirname "$CLAUDE_PLUGIN_ROOT")/skills/ehrql-dataset-authoring"
-# Codex / manual install — skill root is the directory containing this SKILL.md
-SKILL_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PLUGIN_ROOT="$CLAUDE_PLUGIN_ROOT"
+# Codex / manual install — resolve this SKILL.md, then go up from skills/<name>
+SKILL_ROOT="/absolute/path/to/the/directory/containing/this/SKILL.md"
+PLUGIN_ROOT="$(cd "$SKILL_ROOT/../.." && pwd)"
 ```
 
 Before doing any ehrQL work, check whether the environment is ready:
 
-- If `uv` is not installed: run `bash "$SKILL_ROOT/scripts/setup.sh"`
-- If no `pyproject.toml` exists in the current directory: this is a new project. If the user asked to set up or author a project, run `bash "$SKILL_ROOT/scripts/scaffold-project.sh"` before continuing.
-- If `pyproject.toml` exists but `.venv/bin/ehrql` does not: run `bash "$SKILL_ROOT/scripts/setup.sh"`
+- If `uv` is not installed: run `bash "$PLUGIN_ROOT/scripts/setup.sh"`
+- If no `pyproject.toml` exists in the current directory: this is a new project. If the user asked to set up or author a project, run `bash "$PLUGIN_ROOT/scripts/scaffold-project.sh"` before continuing.
+- If `pyproject.toml` exists but `.venv/bin/ehrql` does not: run `bash "$PLUGIN_ROOT/scripts/setup.sh"`
 
 When installed as a Claude Code plugin, the `SessionStart` hook performs these checks automatically and will have reported the current state at the top of the session — use that before asking the user to run anything.
 
@@ -45,8 +46,8 @@ When installed as a Claude Code plugin, the `SessionStart` hook performs these c
 
 When the user is starting fresh (no `analysis/` directory, no `pyproject.toml`):
 
-1. Run `bash "$SKILL_ROOT/scripts/scaffold-project.sh"` when the user's request is to set up or author the new project. The request supplies the necessary confirmation to create these project files.
-2. This copies the starter `pyproject.toml`, `analysis/dataset_definition.py`, and `dummy-tables/*.csv` into place, then runs setup automatically.
+1. Run `bash "$PLUGIN_ROOT/scripts/scaffold-project.sh"` when the user's request is to set up or author the new project. The request supplies the necessary confirmation to create these local project files.
+2. This fetches `opensafely/research-template`, preserves its OpenSAFELY project and devcontainer structure, adds the starter `pyproject.toml`, `analysis/dataset_definition.py`, and `dummy-tables/*.csv`, then runs setup automatically. Existing files are not overwritten.
 3. After scaffolding, confirm the environment works: `.venv/bin/ehrql --version`.
 4. Only then proceed to write the dataset definition from the user's spec.
 
@@ -123,7 +124,7 @@ Whenever codelists are imported, add a clearly visible block comment near the to
 
 ## Runbook
 
-- Setup (first time or after changes to pyproject.toml): `bash "$SKILL_ROOT/scripts/setup.sh"`
+- Setup (first time or after changes to pyproject.toml): `bash "$PLUGIN_ROOT/scripts/setup.sh"`
 - Generate dummy data: `.venv/bin/ehrql generate-dataset analysis/dataset_definition.py --output dataset.csv`
 - Generate dummy data with custom dummy tables: `.venv/bin/ehrql generate-dataset analysis/dataset_definition.py --dummy-tables dummy-tables/ --output dataset.csv`
 - If `.venv/bin/ehrql` is not available, fall back to: `uv run ehrql generate-dataset analysis/dataset_definition.py --output dataset.csv`
@@ -141,6 +142,8 @@ Whenever codelists are imported, add a clearly visible block comment near the to
 7. Run assurance tests and fix any failures.
 8. Run dummy-data generation and fix any failures.
 9. Update `README.md` to reflect the current state of the dataset definition: describe the brief (what the definition is trying to implement, in plain language) and include the exact command to generate a dataset from it.
+
+If the user asks for a preloaded Codespace, complete all nine steps first, then read and follow [references/codespaces.md](references/codespaces.md). Repository creation and pushing are separate external mutations and require the destination owner, name, visibility, and authorization described there.
 
 Always test. Dummy-data generation checks that the definition compiles and can produce output. Assurance tests are mandatory and check the exact behaviour on representative patients.
 

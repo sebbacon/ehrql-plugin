@@ -5,7 +5,8 @@ A Claude Code / Codex plugin for authoring [ehrQL](https://docs.opensafely.org/e
 Provides:
 - A skill that guides Claude through writing, testing, and iterating on ehrQL dataset definitions
 - Automatic environment detection and setup (installs `uv` and `ehrql` if needed)
-- Project scaffolding (starter `dataset_definition.py`, dummy tables, `pyproject.toml`)
+- Project scaffolding based on `opensafely/research-template`, with its Codespaces devcontainer plus starter ehrQL files
+- A guarded handoff that publishes validated, committed work to a new template-backed repository and returns a Codespaces link
 - Bundled upstream ehrQL reference documentation
 
 ## Requirements
@@ -69,7 +70,8 @@ Open Claude Code (or Codex) in an empty directory and say:
 
 > "Set up a new ehrQL project here"
 
-Claude will scaffold the project structure and install dependencies automatically.
+Claude will fetch the OpenSAFELY research template, add the ehrQL starter files,
+and install dependencies automatically.
 It will not begin authoring the definition until scaffolding is complete.
 
 ### Working on an existing project
@@ -106,8 +108,17 @@ Claude uses this information to proactively offer setup or scaffolding help with
 | Script | Purpose |
 |--------|---------|
 | `scripts/setup.sh` | Install `uv` + sync Python environment |
-| `scripts/scaffold-project.sh` | Copy starter files into current directory + run setup |
+| `scripts/scaffold-project.sh` | Fetch the OpenSAFELY research template, add starter files, and run setup |
+| `scripts/publish-codespace.sh` | Publish a clean committed project to a new template-backed GitHub repository |
 | `scripts/check-env.sh` | Print JSON status of the current environment |
+
+### Providing a preloaded Codespace
+
+After the definition and assurance tests pass, ask Claude or Codex to provide the
+project as a Codespace. It will ask you to confirm the GitHub owner, repository
+name, and visibility before creating or pushing anything. The handoff is a
+`https://codespaces.new/OWNER/REPOSITORY` link; opening it lets GitHub create the
+Codespace under your account and billing policy.
 
 ## Updating ehrql version
 
