@@ -1,6 +1,6 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "ehrql-authoring",
+  "name": "ehrql-plugin",
   "description": "ehrQL dataset authoring for OpenSAFELY",
   "owner": {
     "name": "sebbacon",
@@ -8,7 +8,7 @@
   },
   "plugins": [
     {
-      "name": "ehrql-authoring",
+      "name": "ehrql-plugin",
       "description": "Write, test, and iterate on ehrQL dataset definitions. Includes environment setup, project scaffolding, and bundled OpenSAFELY reference docs.",
       "author": {
         "name": "sebbacon"

@@ -30,13 +30,13 @@ The shell scripts (`setup.sh`, `scaffold-project.sh`, etc.) do not run natively 
 
 ```bash
 # Add as a marketplace, then install
-claude plugins marketplace add https://github.com/opensafely-core/ehrql-plugin.git
-claude plugins install ehrql-authoring
+claude plugins marketplace add https://github.com/sebbacon/ehrql-plugin.git
+claude plugins install ehrql-plugin
 ```
 
 Or load for a single session without installing:
 ```bash
-claude --plugin-url https://github.com/opensafely-core/ehrql-plugin/archive/refs/heads/main.zip
+claude --plugin-url https://github.com/sebbacon/ehrql-plugin/archive/refs/heads/main.zip
 ```
 
 ### Codex
@@ -46,7 +46,7 @@ Codex installs plugins through its built-in plugin browser — run `/plugins` in
 **For skill-only use** (no plugin browser needed), clone the repo and symlink the skill into Codex's discovery path:
 
 ```bash
-git clone https://github.com/opensafely-core/ehrql-plugin ~/ehrql-plugin
+git clone https://github.com/sebbacon/ehrql-plugin ~/ehrql-plugin
 
 # User-wide (available in all projects)
 mkdir -p ~/.agents/skills
