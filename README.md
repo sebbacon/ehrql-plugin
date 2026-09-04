@@ -70,6 +70,7 @@ Open Claude Code (or Codex) in an empty directory and say:
 > "Set up a new ehrQL project here"
 
 Claude will scaffold the project structure and install dependencies automatically.
+It will not begin authoring the definition until scaffolding is complete.
 
 ### Working on an existing project
 
@@ -78,6 +79,8 @@ Open Claude Code in a directory that contains `analysis/dataset_definition.py` a
 > "Update the dataset definition to include patients with a diagnosis of hypertension in the last 5 years"
 
 The skill activates automatically when editing `analysis/dataset_definition.py` or asking about ehrQL.
+For every dataset-definition change, it requires assurance scenarios and runs both
+`ehrql assure` and dummy-data generation before declaring the work complete.
 
 ### Slash command
 

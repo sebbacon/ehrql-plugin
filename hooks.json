@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'echo \"[ehrql-plugin]\"; command -v uv >/dev/null 2>&1 || echo \"uv not installed. Run: curl -LsSf https://astral.sh/uv/install.sh | sh\"; [ -f pyproject.toml ] || echo \"No pyproject.toml found. Offer to scaffold a new project.\"; [ -f pyproject.toml ] && ! [ -x .venv/bin/ehrql ] && echo \"ehrQL not installed. Run: uv sync\" || true; command -v uv >/dev/null 2>&1 && [ -f pyproject.toml ] && [ -x .venv/bin/ehrql ] && echo \"ehrQL environment ready.\" || true'"
+            "command": "bash -c 'echo \"[ehrql-plugin]\"; command -v uv >/dev/null 2>&1 || echo \"uv not installed. Run: curl -LsSf https://astral.sh/uv/install.sh | sh\"; [ -f pyproject.toml ] || echo \"No pyproject.toml found. Before authoring ehrQL, run the plugin scaffold script.\"; [ -f pyproject.toml ] && ! [ -x .venv/bin/ehrql ] && echo \"ehrQL not installed. Before editing, run: uv sync\" || true; command -v uv >/dev/null 2>&1 && [ -f pyproject.toml ] && [ -x .venv/bin/ehrql ] && echo \"ehrQL environment ready.\" || true; echo \"Dataset-definition changes are not complete until assurance tests and dummy-data generation both pass.\"'"
           }
         ]
       }
