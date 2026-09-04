@@ -7,6 +7,21 @@ description: Use when writing or editing an ehrQL dataset definition (`analysis/
 
 Use this skill when the user wants to create or modify an ehrQL dataset definition, set up a new ehrQL project, or run tests against a dataset definition.
 
+## Required gates
+
+Do not start authoring a dataset definition until the project is ready:
+
+- For a new project, run the bundled scaffold script before writing any ehrQL.
+- For an existing project, verify that `pyproject.toml`, `analysis/`, and an ehrQL CLI are available; repair missing setup before editing the definition.
+
+Do not report a dataset-definition change as complete until all of the following are true:
+
+- `analysis/test_dataset_definition.py` contains assurance scenarios for the changed behaviour.
+- `.venv/bin/ehrql assure analysis/test_dataset_definition.py` passes.
+- Dummy-data generation from `analysis/dataset_definition.py` passes.
+
+If a required command cannot run, stop and report the specific blocker. Do not silently skip scaffolding or either validation step.
+
 ## Environment setup
 
 The skill's setup scripts live in a `scripts/` directory alongside this file. Locate the skill root with:
@@ -21,7 +36,7 @@ SKILL_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 Before doing any ehrQL work, check whether the environment is ready:
 
 - If `uv` is not installed: run `bash "$SKILL_ROOT/scripts/setup.sh"`
-- If no `pyproject.toml` exists in the current directory: this is a new project. Offer to scaffold it by running `bash "$SKILL_ROOT/scripts/scaffold-project.sh"`
+- If no `pyproject.toml` exists in the current directory: this is a new project. If the user asked to set up or author a project, run `bash "$SKILL_ROOT/scripts/scaffold-project.sh"` before continuing.
 - If `pyproject.toml` exists but `.venv/bin/ehrql` does not: run `bash "$SKILL_ROOT/scripts/setup.sh"`
 
 When installed as a Claude Code plugin, the `SessionStart` hook performs these checks automatically and will have reported the current state at the top of the session — use that before asking the user to run anything.
@@ -30,11 +45,10 @@ When installed as a Claude Code plugin, the `SessionStart` hook performs these c
 
 When the user is starting fresh (no `analysis/` directory, no `pyproject.toml`):
 
-1. Confirm the user wants to start a new ehrQL project in the current directory.
-2. Run `bash "$SKILL_ROOT/scripts/scaffold-project.sh"`
-3. This copies the starter `pyproject.toml`, `analysis/dataset_definition.py`, and `dummy-tables/*.csv` into place, then runs setup automatically.
-4. After scaffolding, confirm the environment works: `.venv/bin/ehrql --version`
-5. Then proceed to write the dataset definition from the user's spec.
+1. Run `bash "$SKILL_ROOT/scripts/scaffold-project.sh"` when the user's request is to set up or author the new project. The request supplies the necessary confirmation to create these project files.
+2. This copies the starter `pyproject.toml`, `analysis/dataset_definition.py`, and `dummy-tables/*.csv` into place, then runs setup automatically.
+3. After scaffolding, confirm the environment works: `.venv/bin/ehrql --version`.
+4. Only then proceed to write the dataset definition from the user's spec.
 
 ## Local contract
 
@@ -122,10 +136,10 @@ Whenever codelists are imported, add a clearly visible block comment near the to
 2. Read `references/source-index.md` for the local doc map.
 3. Open only the upstream docs you need from `references/upstream/`.
 4. Implement the dataset definition with explicit names and readable structure.
-5. Test the result.
-6. Add or update assurance tests in `analysis/test_dataset_definition.py`.
-7. Ensure each assurance-test case is commented so a reviewer can see the exact rule or branch being checked.
-8. Run both assurance tests and dummy-data generation.
+5. Add or update assurance tests in `analysis/test_dataset_definition.py`.
+6. Ensure each assurance-test case is commented so a reviewer can see the exact rule or branch being checked.
+7. Run assurance tests and fix any failures.
+8. Run dummy-data generation and fix any failures.
 9. Update `README.md` to reflect the current state of the dataset definition: describe the brief (what the definition is trying to implement, in plain language) and include the exact command to generate a dataset from it.
 
 Always test. Dummy-data generation checks that the definition compiles and can produce output. Assurance tests are mandatory and check the exact behaviour on representative patients.
