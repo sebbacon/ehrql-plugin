@@ -145,6 +145,11 @@ Whenever codelists are imported, add a clearly visible block comment near the to
 
 If the user asks for a preloaded Codespace, complete all nine steps first, then read and follow [references/codespaces.md](references/codespaces.md). Repository creation and pushing are separate external mutations and require the destination owner, name, visibility, and authorization described there.
 
+When offering to publish the finished project, ask the user for a repository
+name and privacy setting, or include a suggested name and privacy setting in the
+offer. Treat suggestions as proposals only; confirm the exact owner, repository
+name, and visibility before creating or pushing to the repository.
+
 Always test. Dummy-data generation checks that the definition compiles and can produce output. Assurance tests are mandatory and check the exact behaviour on representative patients.
 
 ## Upstream doc map
