@@ -52,6 +52,14 @@ main() {
         printf 'commit or discard all project changes before publishing\n' >&2
         exit 1
     fi
+    git config user.name >/dev/null || {
+        printf 'configure git user.name before publishing\n' >&2
+        exit 1
+    }
+    git config user.email >/dev/null || {
+        printf 'configure git user.email before publishing\n' >&2
+        exit 1
+    }
     git cat-file -e HEAD:.devcontainer/devcontainer.json 2>/dev/null || {
         printf 'the committed project has no .devcontainer/devcontainer.json\n' >&2
         exit 1

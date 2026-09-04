@@ -16,7 +16,7 @@ git -C "$TEST_ROOT/template" -c user.name=Test -c user.email=test@example.com co
 mkdir "$TEST_ROOT/project"
 (
     cd "$TEST_ROOT/project"
-    RESEARCH_TEMPLATE_URL="$TEST_ROOT/template" \
+    RESEARCH_TEMPLATE_URL="file://$TEST_ROOT/template" \
         bash "$ROOT/scripts/scaffold-project.sh" --skip-setup
 )
 

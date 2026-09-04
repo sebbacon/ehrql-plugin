@@ -12,14 +12,15 @@ git init -q "$TEST_ROOT/template"
 git -C "$TEST_ROOT/template" add .
 git -C "$TEST_ROOT/template" -c user.name=Test -c user.email=test@example.com commit -qm 'Create template'
 
-printf '{}\n' > "$TEST_ROOT/project/.devcontainer-placeholder"
 mkdir -p "$TEST_ROOT/project/.devcontainer"
 printf '{}\n' > "$TEST_ROOT/project/.devcontainer/devcontainer.json"
 printf 'version: 4.0\n' > "$TEST_ROOT/project/project.yaml"
 printf 'edited dataset\n' > "$TEST_ROOT/project/analysis/dataset_definition.py"
 git init -q "$TEST_ROOT/project"
+git -C "$TEST_ROOT/project" config user.name Test
+git -C "$TEST_ROOT/project" config user.email test@example.com
 git -C "$TEST_ROOT/project" add .
-git -C "$TEST_ROOT/project" -c user.name=Test -c user.email=test@example.com commit -qm 'Author study'
+git -C "$TEST_ROOT/project" commit -qm 'Author study'
 
 cp "$ROOT/tests/fixtures/gh" "$TEST_ROOT/bin/gh"
 chmod +x "$TEST_ROOT/bin/gh"
