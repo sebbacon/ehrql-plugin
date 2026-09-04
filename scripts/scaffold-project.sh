@@ -1,20 +1,10 @@
 #!/usr/bin/env bash
-# Scaffolds a new ehrQL project from the OpenSAFELY research template, then adds
-# the plugin's ehrQL starter files. Existing files are never overwritten.
+# Scaffolds a new ehrQL project in the current directory from bundled templates.
+# Safe to run in an existing directory — skips files that already exist.
 set -euo pipefail
 
 PLUGIN_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEMPLATES="$PLUGIN_ROOT/templates"
-RESEARCH_TEMPLATE_URL="${RESEARCH_TEMPLATE_URL:-https://github.com/opensafely/research-template.git}"
-RUN_SETUP=true
-STAGING_DIR=""
-
-cleanup() {
-    if [ -n "$STAGING_DIR" ] && [ -d "$STAGING_DIR" ]; then
-        rm -rf "$STAGING_DIR"
-    fi
-}
-trap cleanup EXIT
 
 log() {
     printf '[ehrql-scaffold] %s\n' "$*"
@@ -32,34 +22,7 @@ copy_if_missing() {
     fi
 }
 
-copy_research_template() {
-    STAGING_DIR="$(mktemp -d)"
-    local checkout="$STAGING_DIR/research-template"
-
-    log "fetching base template from $RESEARCH_TEMPLATE_URL"
-    git clone --depth 1 "$RESEARCH_TEMPLATE_URL" "$checkout"
-    while IFS= read -r -d '' source; do
-        local relative="${source#"$checkout/"}"
-        if [ -d "$source" ]; then
-            mkdir -p "$relative"
-        elif [ ! -e "$relative" ]; then
-            mkdir -p "$(dirname "$relative")"
-            cp -P "$source" "$relative"
-        fi
-    done < <(find "$checkout" -mindepth 1 -path "$checkout/.git" -prune -o -print0)
-    log "copied OpenSAFELY research template"
-}
-
 main() {
-    if [ "${1:-}" = "--skip-setup" ]; then
-        RUN_SETUP=false
-        shift
-    fi
-    if [ "$#" -ne 0 ]; then
-        printf 'usage: %s [--skip-setup]\n' "$0" >&2
-        exit 2
-    fi
-
     log "scaffolding ehrQL project in $(pwd)..."
 
     copy_if_missing "$TEMPLATES/pyproject.toml" "pyproject.toml"
@@ -69,7 +32,6 @@ main() {
         filename="$(basename "$csv")"
         copy_if_missing "$csv" "dummy-tables/$filename"
     done
-    copy_research_template
 
     log ""
     log "scaffold complete. Next steps:"
@@ -79,12 +41,8 @@ main() {
     log "  4. Run assurance tests: .venv/bin/ehrql assure analysis/test_dataset_definition.py"
     log "  5. Generate dummy output: .venv/bin/ehrql generate-dataset analysis/dataset_definition.py --output dataset.csv"
     log ""
-    if [ "$RUN_SETUP" = true ]; then
-        log "Running setup now..."
-        bash "$PLUGIN_ROOT/scripts/setup.sh"
-    else
-        log "Skipping setup as requested."
-    fi
+    log "Running setup now..."
+    bash "$PLUGIN_ROOT/scripts/setup.sh"
 }
 
 main "$@"
