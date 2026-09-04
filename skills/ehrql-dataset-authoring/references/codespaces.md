@@ -17,6 +17,11 @@ project based on `opensafely/research-template`.
 
 ## Confirm the GitHub mutation
 
+When offering to publish the project, ask the user for a repository name and
+privacy setting. Alternatively, make the offer concrete by suggesting an
+`OWNER/REPOSITORY` and one of private, public, or internal. A suggestion is not
+authorization to create the repository.
+
 Determine the destination `OWNER/REPOSITORY` and whether it should be private,
 public, or internal. Do not infer visibility. Check `gh auth status`, and confirm
 that the authenticated account can create a repository for the chosen owner.
