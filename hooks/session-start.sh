@@ -21,13 +21,13 @@ fi
 
 if [ "$has_pyproject" -eq 0 ]; then
     echo "No pyproject.toml found in the current directory. This does not appear to be an ehrQL project."
-    echo "Offer to scaffold a new project by running: bash $PLUGIN_ROOT/scripts/scaffold-project.sh"
+    echo "Before authoring ehrQL here, scaffold the project by running: bash $PLUGIN_ROOT/scripts/scaffold-project.sh"
 elif [ "$has_ehrql_cli" -eq 0 ]; then
-    echo "pyproject.toml found but ehrql CLI is not installed. Offer to run setup: bash $PLUGIN_ROOT/scripts/setup.sh"
+    echo "pyproject.toml found but ehrql CLI is not installed. Before editing, run setup: bash $PLUGIN_ROOT/scripts/setup.sh"
 fi
 
 if [ "$has_analysis" -eq 0 ]; then
-    echo "No analysis/ directory found. Offer to scaffold one: bash $PLUGIN_ROOT/scripts/scaffold-project.sh"
+    echo "No analysis/ directory found. Before authoring ehrQL, scaffold it: bash $PLUGIN_ROOT/scripts/scaffold-project.sh"
 fi
 
 if [ "$has_dummy" -eq 0 ]; then
@@ -37,3 +37,5 @@ fi
 if [ "$has_uv" -eq 1 ] && [ "$has_pyproject" -eq 1 ] && [ "$has_ehrql_cli" -eq 1 ] && [ "$has_analysis" -eq 1 ]; then
     echo "ehrQL environment ready."
 fi
+
+echo "Dataset-definition changes are not complete until assurance tests and dummy-data generation both pass."
