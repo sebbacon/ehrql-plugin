@@ -1,6 +1,6 @@
 {
   "name": "ehrql-plugin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "ehrQL dataset authoring for OpenSAFELY — skill, templates, and environment setup",
   "author": {
     "name": "sebbacon",
@@ -11,12 +11,13 @@
   "license": "MIT",
   "keywords": ["ehrql", "opensafely", "health-data", "clinical"],
   "skills": "./skills/",
-  "hooks": "./hooks.json",
   "interface": {
     "displayName": "ehrQL Authoring",
     "shortDescription": "Write and test OpenSAFELY ehrQL dataset definitions",
+    "longDescription": "Set up OpenSAFELY projects and write, assure, and validate ehrQL dataset definitions.",
     "developerName": "sebbacon",
     "category": "Developer Tools",
+    "capabilities": ["Write"],
     "defaultPrompt": [
       "Set up a new ehrQL project here",
       "Write a dataset definition for my study",

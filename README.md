@@ -62,6 +62,22 @@ Invoke with `$ehrql-dataset-authoring` or let Codex select it implicitly.
 
 > **Note:** The SessionStart environment check hook works automatically in Claude Code. In Codex, run `bash ~/ehrql-plugin/scripts/check-env.sh` manually to see what's missing, or just ask Codex to set up the project and it will use the skill instructions to guide you.
 
+#### Refreshing a stale Codex skill
+
+Plugin updates become available after the updated release is published and its
+manifest version changes. Update the plugin from Codex's plugin browser, then
+start a new thread so Codex discovers the refreshed skill.
+
+For a skill-only symlink installation, update the clone instead:
+
+```bash
+git -C ~/ehrql-plugin pull --ff-only
+```
+
+The repository's `VERSION`, `.codex-plugin/plugin.json`, and
+`.claude-plugin/plugin.json` must remain in sync for every release. Run
+`bash tests/plugin-metadata.sh` before publishing.
+
 ## Usage
 
 ### Starting a new ehrQL project

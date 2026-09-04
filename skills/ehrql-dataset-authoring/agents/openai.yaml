@@ -1,5 +1,6 @@
 interface:
   display_name: "ehrQL Dataset Authoring"
+  short_description: "Write and validate OpenSAFELY ehrQL datasets"
 
 policy:
   allow_implicit_invocation: true
