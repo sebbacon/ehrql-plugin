@@ -1,11 +1,11 @@
 ---
 name: ehrql-dataset-authoring
-description: Use when writing or editing an ehrQL dataset definition (`analysis/dataset_definition.py`) or related assurance tests, scaffolding an OpenSAFELY research project, or providing the finished project as a preloaded GitHub Codespace. Covers setup, validation, dummy data, assurance tests, and Codespace handoff.
+description: Use when writing or editing an ehrQL dataset definition (`analysis/dataset_definition.py`) or related assurance tests. This skill explains environment setup, project scaffolding, the ehrQL authoring workflow, how to run `ehrql generate-dataset` for dummy data, how to organise and run assurance tests, and what each bundled upstream ehrQL doc covers.
 ---
 
 # ehrQL Dataset Authoring
 
-Use this skill when the user wants to create or modify an ehrQL dataset definition, set up a new OpenSAFELY project, run tests against a dataset definition, or receive the finished project in a GitHub Codespace.
+Use this skill when the user wants to create or modify an ehrQL dataset definition, set up a new ehrQL project, or run tests against a dataset definition.
 
 ## Required gates
 
@@ -47,7 +47,7 @@ When installed as a Claude Code plugin, the `SessionStart` hook performs these c
 When the user is starting fresh (no `analysis/` directory, no `pyproject.toml`):
 
 1. Run `bash "$PLUGIN_ROOT/scripts/scaffold-project.sh"` when the user's request is to set up or author the new project. The request supplies the necessary confirmation to create these local project files.
-2. This fetches `opensafely/research-template`, preserves its OpenSAFELY project and devcontainer structure, adds the starter `pyproject.toml`, `analysis/dataset_definition.py`, and `dummy-tables/*.csv`, then runs setup automatically. Existing files are not overwritten.
+2. This copies the starter `pyproject.toml`, `analysis/dataset_definition.py`, and `dummy-tables/*.csv` into place, then runs setup automatically.
 3. After scaffolding, confirm the environment works: `.venv/bin/ehrql --version`.
 4. Only then proceed to write the dataset definition from the user's spec.
 
@@ -142,20 +142,6 @@ Whenever codelists are imported, add a clearly visible block comment near the to
 7. Run assurance tests and fix any failures.
 8. Run dummy-data generation and fix any failures.
 9. Update `README.md` to reflect the current state of the dataset definition: describe the brief (what the definition is trying to implement, in plain language) and include the exact command to generate a dataset from it.
-
-For a project that will be published to a Codespace, document the containerized
-OpenSAFELY invocation using the scaffolded file and directory names:
-
-```sh
-opensafely exec ehrql:v1 generate-dataset analysis/dataset_definition.py --dummy-tables dummy-tables
-```
-
-If the user asks for a preloaded Codespace, complete all nine steps first, then read and follow [references/codespaces.md](references/codespaces.md). Repository creation and pushing are separate external mutations and require the destination owner, name, visibility, and authorization described there.
-
-When offering to publish the finished project, ask the user for a repository
-name and privacy setting, or include a suggested name and privacy setting in the
-offer. Treat suggestions as proposals only; confirm the exact owner, repository
-name, and visibility before creating or pushing to the repository.
 
 Always test. Dummy-data generation checks that the definition compiles and can produce output. Assurance tests are mandatory and check the exact behaviour on representative patients.
 
