@@ -8,10 +8,15 @@ project based on `opensafely/research-template`.
 
 1. Complete the dataset definition, assurance tests, dummy-data generation, and
    README update required by the main workflow.
-2. Ensure the project is a Git repository. Review `git status`, the staged diff,
+2. Verify that the README tells Codespace users to run the scaffolded definition
+   with its supplied dummy tables:
+   ```sh
+   opensafely exec ehrql:v1 generate-dataset analysis/dataset_definition.py --dummy-tables dummy-tables
+   ```
+3. Ensure the project is a Git repository. Review `git status`, the staged diff,
    and ignored files for secrets or patient data before committing the intended
    project files.
-3. Commit the complete project snapshot. The publication script refuses a dirty
+4. Commit the complete project snapshot. The publication script refuses a dirty
    worktree and publishes only files in `HEAD`; ignored and uncommitted files are
    not uploaded.
 
