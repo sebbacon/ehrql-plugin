@@ -12,12 +12,12 @@ Use this skill when the user wants to create or modify an ehrQL dataset definiti
 Do not start authoring a dataset definition until the project is ready:
 
 - For a new project, run the bundled scaffold script before writing any ehrQL.
-- For an existing project, verify that `pyproject.toml`, `analysis/`, and an ehrQL CLI are available; repair missing setup before editing the definition.
+- For an existing project, verify that `pyproject.toml`, `analysis/`, and an ehrQL command are available; repair missing setup before editing the definition.
 
 Do not report a dataset-definition change as complete until all of the following are true:
 
 - `analysis/test_dataset_definition.py` contains assurance scenarios for the changed behaviour.
-- `.venv/bin/ehrql assure analysis/test_dataset_definition.py` passes.
+- Assurance tests pass using the selected ehrQL command.
 - Dummy-data generation from `analysis/dataset_definition.py` passes.
 
 If a required command cannot run, stop and report the specific blocker. Do not silently skip scaffolding or either validation step.
@@ -36,9 +36,14 @@ PLUGIN_ROOT="$(cd "$SKILL_ROOT/../.." && pwd)"
 
 Before doing any ehrQL work, check whether the environment is ready:
 
-- If `uv` is not installed: run `bash "$PLUGIN_ROOT/scripts/setup.sh"`
+- First probe for the OpenSAFELY CLI with `opensafely exec ehrql:v1 --version`. If that succeeds, run every ehrQL subcommand as `opensafely exec ehrql:v1 <subcommand> ...`.
+- If the probe fails, run ehrQL subcommands as `.venv/bin/ehrql <subcommand> ...` using the project's local installation.
 - If no `pyproject.toml` exists in the current directory: this is a new project. If the user asked to set up or author a project, run `bash "$PLUGIN_ROOT/scripts/scaffold-project.sh"` before continuing.
-- If `pyproject.toml` exists but `.venv/bin/ehrql` does not: run `bash "$PLUGIN_ROOT/scripts/setup.sh"`
+- If the OpenSAFELY probe failed and `uv` is not installed: run `bash "$PLUGIN_ROOT/scripts/setup.sh"`.
+- If the OpenSAFELY probe failed and `pyproject.toml` exists but `.venv/bin/ehrql` does not: run `bash "$PLUGIN_ROOT/scripts/setup.sh"`
+- If setup does not provide `.venv/bin/ehrql`, use `uv run ehrql <subcommand> ...` as the local fallback.
+
+Keep the OpenSAFELY action pinned to `ehrql:v1`. The runbook below shows the preferred OpenSAFELY commands; when the probe fails, replace the `opensafely exec ehrql:v1` prefix with the available local prefix.
 
 When installed as a Claude Code plugin, the `SessionStart` hook performs these checks automatically and will have reported the current state at the top of the session — use that before asking the user to run anything.
 
@@ -48,7 +53,7 @@ When the user is starting fresh (no `analysis/` directory, no `pyproject.toml`):
 
 1. Run `bash "$PLUGIN_ROOT/scripts/scaffold-project.sh"` when the user's request is to set up or author the new project. The request supplies the necessary confirmation to create these local project files.
 2. This copies the starter `pyproject.toml`, `analysis/dataset_definition.py`, and `dummy-tables/*.csv` into place, then runs setup automatically.
-3. After scaffolding, confirm the environment works: `.venv/bin/ehrql --version`.
+3. After scaffolding, confirm the selected command works by rerunning its version command.
 4. Only then proceed to write the dataset definition from the user's spec.
 
 ## Local contract
@@ -125,11 +130,11 @@ Whenever codelists are imported, add a clearly visible block comment near the to
 ## Runbook
 
 - Setup (first time or after changes to pyproject.toml): `bash "$PLUGIN_ROOT/scripts/setup.sh"`
-- Generate dummy data: `.venv/bin/ehrql generate-dataset analysis/dataset_definition.py --output dataset.csv`
-- Generate dummy data with custom dummy tables: `.venv/bin/ehrql generate-dataset analysis/dataset_definition.py --dummy-tables dummy-tables/ --output dataset.csv`
-- If `.venv/bin/ehrql` is not available, fall back to: `uv run ehrql generate-dataset analysis/dataset_definition.py --output dataset.csv`
+- Generate dummy data: `opensafely exec ehrql:v1 generate-dataset analysis/dataset_definition.py --output dataset.csv`
+- Generate dummy data with custom dummy tables: `opensafely exec ehrql:v1 generate-dataset analysis/dataset_definition.py --dummy-tables dummy-tables/ --output dataset.csv`
 - Preferred assurance-test file location: `analysis/test_dataset_definition.py`
-- Run assurance tests: `.venv/bin/ehrql assure analysis/test_dataset_definition.py`
+- Run assurance tests: `opensafely exec ehrql:v1 assure analysis/test_dataset_definition.py`
+- If the OpenSAFELY probe failed, run the same commands with `.venv/bin/ehrql` (or `uv run ehrql`) in place of `opensafely exec ehrql:v1`.
 
 ## Required workflow
 
@@ -213,7 +218,8 @@ After successfully generating custom dummy tables, update `README.md` with a ded
 2. **How to regenerate it** — the exact command to re-run the generator script (e.g. `uv run python scripts/generate_dummy_tables.py`).
 3. **How to use it with ehrQL** — the exact `ehrql generate-dataset` command that points at the dummy tables directory, for example:
    ```
-   .venv/bin/ehrql generate-dataset analysis/dataset_definition.py \
+   opensafely exec ehrql:v1 generate-dataset analysis/dataset_definition.py \
      --dummy-tables dummy-tables/ \
      --output dataset.csv
    ```
+   If the OpenSAFELY probe failed, document the corresponding `.venv/bin/ehrql` or `uv run ehrql` command instead.
